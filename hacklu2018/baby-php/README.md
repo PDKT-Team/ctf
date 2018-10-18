@@ -81,9 +81,9 @@ The real code is `$ b = "2";$a=" b";//;1=b` because it uses the unicode U+202E o
 
 Our goal is to reach `echo "Good Job ;)";`. There is `// echo $flag;` which indicates that there is a variable named `$flag` but it's not written to the output because it's a comment. We can use `assert("$bb == $cc");` to get arbitrary code execution if we can control `$bb` or `$cc` because `assert` [evaluating string like `eval`](http://php.net/manual/en/function.assert.php).
 
-The `$msg`, `$k1`, dan `$k2` variables can be controlled with GET *requests*. If the requirement satisfied, we can also replace `$cc` in the middle through `@$cc = $_GET['cc'];` and also create variables with the names and values of our own via `$$lel = $hack;` because the value of `$lel` and `$hack` is taken from `foreach ($_GET as $lel => $hack)`.
+The `$msg`, `$k1`, dan `$k2` variables can be controlled with GET requests. If the requirement satisfied, we can also replace `$cc` in the middle through `@$cc = $_GET['cc'];` and also create variables with the names and values of our own via `$$lel = $hack;` because the value of `$lel` and `$hack` is taken from `foreach ($_GET as $lel => $hack)`.
 
-To achieve *remote code execution*, here are some things that must be utilized and done until it reaches the "assert" with the variables we control.
+To achieve remote code execution, here are some things that must be utilized and done until it reaches the `assert` with the variables we control.
 
 ### PHP Wrapper
 
@@ -94,7 +94,7 @@ if(@file_get_contents($msg)!=="Hello Challenge!"){
 }
 ```
 
-Besides the *path* to a file, the `file_get_contents` function can also receive [protocol and *wrapper*] (http://php.net/manual/en/wrappers.php). Unfortunately, it looks like the internet is turned off so `http: //` to the web that we control that contains `Hello Challenge!` cannot work. Alternatively, we can use [`data: //`] (http://php.net/manual/en/wrappers.data.php). We can use `data://text/plain,Hello%20Challenge!` as the value of `$msg`.
+Besides the path to a file, the `file_get_contents` function can also receive [protocol and *wrapper*](http://php.net/manual/en/wrappers.php). Unfortunately, it looks like the internet is turned off so `http: //` to the web that we control that contains `Hello Challenge!` cannot work. Alternatively, we can use [`data: //`] (http://php.net/manual/en/wrappers.data.php). We can use `data://text/plain,Hello%20Challenge!` as the value of `$msg`.
 
 ### Strict Comparison
 
@@ -104,7 +104,7 @@ if(intval($k1) !== $cc || $k1 === $cc){
 }
 ```
 
-Note that `$k1` is taken from `$ _GET ['key1'] `so that the variable data type is a string. Comparison with the `$cc` variable uses `strict comparison` (the value and data type must be the same). The `$cc` variable contains 1337 (number) so we can just set `$k1` to 1337. The comparison result of `$k1 === $cc` will be `false`.
+Note that `$k1` is taken from `$_GET['key1'] `so that the variable data type is a string. Comparison with the `$cc` variable uses `strict comparison` (the value and data type must be the same). The `$cc` variable contains 1337 (number) so we can just set `$k1` to 1337. The comparison result of `$k1 === $cc` will be `false`.
 
 ### Loose Comparison
 
