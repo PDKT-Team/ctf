@@ -32,20 +32,20 @@ $ gdb ./forgetful_commander
 gdb-peda$ b *0x0
 Breakpoint 1 at 0x0
 gdb-peda$ r
-Starting program: /vagrant/forgetful_command
+Starting program: /vagrant/forgetful_commander
 Warning:
 Cannot insert breakpoint 1.
 Cannot access memory at address 0x0
 
 gdb-peda$ del 1
 gdb-peda$ info files
-Symbols from "/vagrant/forgetful_command".
+Symbols from "/vagrant/forgetful_commander".
 Native process:
 	Using the running image of child process 28513.
 	While running this, GDB does not access memory from...
 Local exec file:
-	`/vagrant/forgetful_command', file type elf32-i386.
-warning: Cannot find section for the entry point of /vagrant/forgetful_command.
+	`/vagrant/forgetful_commander', file type elf32-i386.
+warning: Cannot find section for the entry point of /vagrant/forgetful_commander.
 	Entry point: 0xd000
 	0x56556194 - 0x565561a7 is .interp
 	0x565561a8 - 0x565561c8 is .note.ABI-tag
@@ -96,7 +96,7 @@ Program received signal SIGSEGV, Segmentation fault.
 [----------------------------------registers-----------------------------------]
 EAX: 0xf7ffd918 --> 0x56555000 --> 0x464c457f
 EBX: 0xf7ffd000 --> 0x23f3c
-ECX: 0xffffd694 --> 0xffffd7c3 ("/vagrant/forgetful_command")
+ECX: 0xffffd694 --> 0xffffd7c3 ("/vagrant/forgetful_commander")
 EDX: 0xffffffff
 ESI: 0xffffd69c --> 0xffffd7de ("XDG_SESSION_ID=221")
 EDI: 0x56562000 --> 0x819c6050
@@ -115,7 +115,7 @@ EFLAGS: 0x10286 (carry PARITY adjust zero SIGN trap INTERRUPT direction overflow
    0x5655705b:	call   0x565570d7
 [------------------------------------stack-------------------------------------]
 0000| 0xffffd690 --> 0x1
-0004| 0xffffd694 --> 0xffffd7c3 ("/vagrant/forgetful_command")
+0004| 0xffffd694 --> 0xffffd7c3 ("/vagrant/forgetful_commander")
 0008| 0xffffd698 --> 0x0
 0012| 0xffffd69c --> 0xffffd7de ("XDG_SESSION_ID=221")
 0016| 0xffffd6a0 --> 0xffffd7f1 ("SHELL=/bin/bash")
@@ -171,11 +171,11 @@ gcc --shared -fPIC hijack.c -o hijack.so -ldl -m32
 Use that library in the `gdb`.
 
 ```
-$ gdb --args env LD_PRELOAD=/vagrant/hijack.so ./forgetful_command
+$ gdb --args env LD_PRELOAD=/vagrant/hijack.so ./forgetful_commander
 ...
 gdb-peda$ r
-Starting program: /usr/bin/env LD_PRELOAD=/vagrant/hijack.so ./forgetful_command
-process 28754 is executing new program: /vagrant/forgetful_command
+Starting program: /usr/bin/env LD_PRELOAD=/vagrant/hijack.so ./forgetful_commander
+process 28754 is executing new program: /vagrant/forgetful_commander
 
 Program received signal SIGINT, Interrupt.
 ...
@@ -255,7 +255,7 @@ From observations on the value of `ecx` in `0x56557267` one by one, we get **fla
 Execution with this flag as the argument will make the program exit with code 0.
 
 ```
-$ strace ./forgetful_command flag{Just_type__Please__and_the_missles_will_be_launched.}
+$ strace ./forgetful_commander flag{Just_type__Please__and_the_missles_will_be_launched.}
 ...
 open("/proc/self/maps", O_RDONLY)       = 3
 read(3, "56596000-56598000 r--p 00000000 "..., 16384) = 1594
@@ -288,20 +288,20 @@ $ gdb ./forgetful_commander
 gdb-peda$ b *0x0
 Breakpoint 1 at 0x0
 gdb-peda$ r
-Starting program: /vagrant/forgetful_command
+Starting program: /vagrant/forgetful_commander
 Warning:
 Cannot insert breakpoint 1.
 Cannot access memory at address 0x0
 
 gdb-peda$ del 1
 gdb-peda$ info files
-Symbols from "/vagrant/forgetful_command".
+Symbols from "/vagrant/forgetful_commander".
 Native process:
 	Using the running image of child process 28513.
 	While running this, GDB does not access memory from...
 Local exec file:
-	`/vagrant/forgetful_command', file type elf32-i386.
-warning: Cannot find section for the entry point of /vagrant/forgetful_command.
+	`/vagrant/forgetful_commander', file type elf32-i386.
+warning: Cannot find section for the entry point of /vagrant/forgetful_commander.
 	Entry point: 0xd000
 	0x56556194 - 0x565561a7 is .interp
 	0x565561a8 - 0x565561c8 is .note.ABI-tag
@@ -352,7 +352,7 @@ Program received signal SIGSEGV, Segmentation fault.
 [----------------------------------registers-----------------------------------]
 EAX: 0xf7ffd918 --> 0x56555000 --> 0x464c457f
 EBX: 0xf7ffd000 --> 0x23f3c
-ECX: 0xffffd694 --> 0xffffd7c3 ("/vagrant/forgetful_command")
+ECX: 0xffffd694 --> 0xffffd7c3 ("/vagrant/forgetful_commander")
 EDX: 0xffffffff
 ESI: 0xffffd69c --> 0xffffd7de ("XDG_SESSION_ID=221")
 EDI: 0x56562000 --> 0x819c6050
@@ -371,7 +371,7 @@ EFLAGS: 0x10286 (carry PARITY adjust zero SIGN trap INTERRUPT direction overflow
    0x5655705b:	call   0x565570d7
 [------------------------------------stack-------------------------------------]
 0000| 0xffffd690 --> 0x1
-0004| 0xffffd694 --> 0xffffd7c3 ("/vagrant/forgetful_command")
+0004| 0xffffd694 --> 0xffffd7c3 ("/vagrant/forgetful_commander")
 0008| 0xffffd698 --> 0x0
 0012| 0xffffd69c --> 0xffffd7de ("XDG_SESSION_ID=221")
 0016| 0xffffd6a0 --> 0xffffd7f1 ("SHELL=/bin/bash")
@@ -427,11 +427,11 @@ gcc --shared -fPIC hijack.c -o hijack.so -ldl -m32
 Gunakan `library` tersebut pada `gdb` dan jalankan.
 
 ```
-$ gdb --args env LD_PRELOAD=/vagrant/hijack.so ./forgetful_command
+$ gdb --args env LD_PRELOAD=/vagrant/hijack.so ./forgetful_commander
 ...
 gdb-peda$ r
-Starting program: /usr/bin/env LD_PRELOAD=/vagrant/hijack.so ./forgetful_command
-process 28754 is executing new program: /vagrant/forgetful_command
+Starting program: /usr/bin/env LD_PRELOAD=/vagrant/hijack.so ./forgetful_commander
+process 28754 is executing new program: /vagrant/forgetful_commander
 
 Program received signal SIGINT, Interrupt.
 ...
@@ -510,7 +510,7 @@ Dari observasi pada nilai `ecx` pada `0x56557267` satu persatu, didapatkan **fla
 Eksekusi dengan flag tersebut sebagai argumen akan membuat program exit dengan kode 0.
 
 ```
-$ strace ./forgetful_command flag{Just_type__Please__and_the_missles_will_be_launched.}
+$ strace ./forgetful_commander flag{Just_type__Please__and_the_missles_will_be_launched.}
 ...
 open("/proc/self/maps", O_RDONLY)       = 3
 read(3, "56596000-56598000 r--p 00000000 "..., 16384) = 1594
