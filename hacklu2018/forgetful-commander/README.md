@@ -250,7 +250,7 @@ When the program reaches `0x5655723f`, the value of `[ebp-0x21]` is the first le
 
 By setting the `breakpoint` in `0x56557267` (`cmp eax, ecx`), we can know the value of `ecx` when compared to the argument's characters. For reasons that we have not explored further, this `breakpoint` must be set while still in `__libc_start_main`. If it is set in the middle of execution on `.text`, there will be `SIGTRAP` continuously.
 
-From observations on the value of 'ecx' in `0x56557267` one by one, we get the flag **flag {Just_type__Please__and_the_missles_will_be_launched.}**.
+From observations on the value of `ecx` in `0x56557267` one by one, we get **flag {Just_type__Please__and_the_missles_will_be_launched.}**.
 
 Execution with this flag as the argument will make the program exit with code 0.
 
@@ -505,7 +505,7 @@ Pada saat program mencapai `0x5655723f`, isi dari `[ebp-0x21]` adalah huruf pert
 
 Dengan mengatur `breakpoint` pada `0x56557267` pada instruksi `cmp eax,ecx`, kita dapat mengetahui nilai `ecx` yang dibandingkan dengan argumen karakter demi karakter. Karena alasan yang belum kami eksplorasi lebih lanjut, pemasangan `breakpoint` ini harus dilakukan ketika masih di `__libc_start_main`. Jika dilakukan di tengah-tengah eksekusi pada `.text`, terjadi `SIGTRAP` terus menerus.
 
-Dari observasi pada nilai `ecx` pada `0x56557267` satu persatu, didapatkan flag **flag{Just_type__Please__and_the_missles_will_be_launched.}**.
+Dari observasi pada nilai `ecx` pada `0x56557267` satu persatu, didapatkan **flag{Just_type__Please__and_the_missles_will_be_launched.}**.
 
 Eksekusi dengan flag tersebut sebagai argumen akan membuat program exit dengan kode 0.
 
