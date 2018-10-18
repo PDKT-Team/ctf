@@ -1,6 +1,6 @@
 # Baby PHP
 ---
-**Points:** 109 | **Solves:** 147/1035 | **Category:** Web
+**Points:** 153 | **Solves:** 147/1035 | **Category:** Web
 
 PHP is a popular general-purpose scripting language that is especially suited to web development.
 
