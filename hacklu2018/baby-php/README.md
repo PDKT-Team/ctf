@@ -94,7 +94,7 @@ if(@file_get_contents($msg)!=="Hello Challenge!"){
 }
 ```
 
-Besides the path to a file, the `file_get_contents` function can also receive [protocol and *wrapper*](http://php.net/manual/en/wrappers.php). Unfortunately, it looks like the internet is turned off so `http: //` to the web that we control that contains `Hello Challenge!` cannot work. Alternatively, we can use [`data: //`] (http://php.net/manual/en/wrappers.data.php). We can use `data://text/plain,Hello%20Challenge!` as the value of `$msg`.
+Besides the path to a file, the `file_get_contents` function can also receive [protocol and *wrapper*](http://php.net/manual/en/wrappers.php). Unfortunately, it looks like the internet is turned off so `http: //` to the web that we control that contains `Hello Challenge!` cannot work. Alternatively, we can use [`data: //`](http://php.net/manual/en/wrappers.data.php). We can use `data://text/plain,Hello%20Challenge!` as the value of `$msg`.
 
 ### Strict Comparison
 
