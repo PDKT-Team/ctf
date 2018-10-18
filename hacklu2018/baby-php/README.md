@@ -104,7 +104,7 @@ if(intval($k1) !== $cc || $k1 === $cc){
 }
 ```
 
-Note that `$k1` is taken from `$_GET['key1'] `so that the variable data type is a string. Comparison with the `$cc` variable uses `strict comparison` (the value and data type must be the same). The `$cc` variable contains 1337 (number) so we can just set `$k1` to 1337. The comparison result of `$k1 === $cc` will be `false`.
+Note that `$k1` is taken from `$_GET['key1'] `so that the variable data type is a string. Comparison with the `$cc` variable uses strict comparison (the value and data type must be the same). The `$cc` variable contains 1337 (number) so we can just set `$k1` to 1337. The comparison result of `$k1 === $cc` will be `false`.
 
 ### Loose Comparison
 
@@ -119,7 +119,7 @@ if(strlen($k2) == $bb){
 
 ```
 
-The value of `$k2` can't be numeric but must be the same as `$cc` which contains 1337. The comparison uses `loose comparison` so that we can set `$k2` with a string beginning with 1337. The string length must match the value `$bb`, which is 42. The regex match used must also be met (remember that the dollar sign is a trap, after 1337 we must enter the unicode character `＄`). We can use `1337%EF%BC%8400000000000000000000000000000000000` as the value of `$k2` so that the value of `$cc` can be controlled.
+The value of `$k2` can't be numeric but must be the same as `$cc` which contains 1337. The comparison uses loose comparison so that we can set `$k2` with a string beginning with 1337. The string length must match the value `$bb`, which is 42. The regex match used must also be met (remember that the dollar sign is a trap, after 1337 we must enter the unicode character `＄`). We can use `1337%EF%BC%8400000000000000000000000000000000000` as the value of `$k2` so that the value of `$cc` can be controlled.
 
 ### NULL Comparison
 
@@ -143,7 +143,7 @@ if($$a !== $k1){
 }
 ```
 
-In PHP, [*variable variable*](http://php.net/manual/en/language.variables.variable.php) can be used to retrieve values ​​with dynamic names. For example, in the example above, the value of `$$ a` is `2`. Remember that `$ b` is not using a space but a U+202E unicode character. The value of `$k1` can be controlled so we only needs to set `$k1` with `2`.
+In PHP, [*variable variable*](http://php.net/manual/en/language.variables.variable.php) can be used to retrieve values ​​with dynamic names. For example, in the example above, the value of `$$a` is `2`. Remember that `$ b` is not using a space but a U+202E unicode character. The value of `$k1` can be controlled so we only needs to set `$k1` with `2`.
 
 ### Remote Code Execution
 
