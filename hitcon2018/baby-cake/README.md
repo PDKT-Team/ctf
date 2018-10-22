@@ -161,8 +161,8 @@ To understand the exploit better, we will breakdown the steps as the flow from r
 
         ...
 
-        $method = strtolower( $request->getMethod() );
-        if ( !in_array($method, ['get', 'post', 'put', 'delete', 'patch']) )
+        $scheme = strtolower( parse_url($url, PHP_URL_SCHEME) );
+        if (strlen($scheme) == 0 || !in_array($scheme, ['http', 'https']))
             return $this->back();
 
         ..
