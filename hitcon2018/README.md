@@ -1,4 +1,4 @@
-# Hack.lu CTF 2018
+# HITCON CTF 2018
 
 https://ctftime.org/event/669
 
