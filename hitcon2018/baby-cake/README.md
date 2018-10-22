@@ -25,7 +25,7 @@ Hint: This is not related to SSRF
 - We can control the parameter of `file_get_contents` in `Cake\Http\FormData` so we can use `phar://` with the payload from `body.cache` for implicit unserialization.
 - We can do PHP Object Injection with available gadgets to do Remote Code Execution; for example, by using `Monolog` vendor.
 
-### Langkah Detail
+### Detailed Steps
 A difficult 'baby' problem with only 4 teams solve it. The web is made with Cake PHP and we got the [source code](baby_cake.tgz). Our goal is to get the shell.
 
 The main logic of the web application is in `src/Controller/PagesController.php`.
