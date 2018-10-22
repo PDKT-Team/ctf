@@ -154,7 +154,7 @@ To understand the exploit better, we will breakdown the steps as the flow from r
 
 #### Passing Request Data
 
-```
+```php
         $request  = $this->request;
         $data = $request->getQuery('data');
         $url  = $request->getQuery('url');
@@ -188,7 +188,7 @@ The URL scheme and the method from us is filtered by the web application so we c
 
 We can use POST/PUT/DELETE/PATCH so that `$response = $this->httpclient($method, $url, $headers, $data);` is called. We can set the `$data` variable using GET `?data=`.
 
-```
+```php
     private function httpclient($method, $url, $headers, $data) {
         $options = [
             'headers' => $headers, 
@@ -794,7 +794,7 @@ Untuk memudahkan memahami exploit, akan dijabarkan alur aplikasi yang terjadi da
 
 #### Passing Request Data
 
-```
+```php
         $request  = $this->request;
         $data = $request->getQuery('data');
         $url  = $request->getQuery('url');
@@ -828,7 +828,7 @@ Skema pada URL dan method yang dimasukkan user difilter oleh web sehingga kita t
 
 Kita dapat menggunakan POST/PUT/DELETE/PATCH agar `$response = $this->httpclient($method, $url, $headers, $data);` terpanggil. Variabel `$data` dapat kita atur menggunakan GET `?data=`.
 
-```
+```php
     private function httpclient($method, $url, $headers, $data) {
         $options = [
             'headers' => $headers, 
