@@ -5,3 +5,4 @@ Write-ups for various CTF challenges by [PDKT team](https://ctftime.org/team/169
 ## 2018
 
 * [**Hack.lu CTF 2018**](hacklu2018)
+* [**HITCON CTF 2018**](hitcon2018)
