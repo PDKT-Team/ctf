@@ -3,4 +3,4 @@
 https://ctftime.org/event/669
 
 ## Web
-- [Baby Cake (XXX)](baby-cake)
+- [Baby Cake (400)](baby-cake)
