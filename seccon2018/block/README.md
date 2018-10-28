@@ -13,8 +13,19 @@ Hint: Real answer flag is not easy to get it, if your post flag is incorrect, it
 [Bahasa Indonesia](#bahasa-indonesia)
 
 ## English
-TODO
+With some recon, we knew the APK is build with Unity. We used [Unity Unpacker](http://devxdevelopment.com/UnityUnpacker) to analyze this APK and found this interesting asset.
 
+![flag asset](block.png)
+
+We tried to submit `SECCON{Y0U_4R3_34CH+3R?}` but failed. My friend suggested that the word is *cheater*, and tried to submit `SECCON{Y0U_4R3_CH34+3R?}` but failed again. Then I tried to fix the grammar, and we got the flag!
+
+Flag: `SECCON{4R3_Y0U_CH34+3R?}`
 
 ## Bahasa Indonesia
-TODO
+Kami mempelajari bahwa APK dibuat dengan Unity. Kami menggunakan [Unity Unpacker](http://devxdevelopment.com/UnityUnpacker) untuk menganalisa APK ini dan menemukan asset yang menarik.
+
+![flag asset](block.png)
+
+Kami mencoba submit `SECCON{Y0U_4R3_34CH+3R?}` tetapi gagal. Teman saya memberi ide kalau katanya adalah *cheater* dan mencoba untuk submit `SECCON{Y0U_4R3_CH34+3R?}` tetapi gagal juga. Kemudian saya membetulkan grammar-nya, dan ternyata mendapat flag!
+
+Flag: `SECCON{4R3_Y0U_CH34+3R?}`
