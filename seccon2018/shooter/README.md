@@ -259,7 +259,7 @@ SetString(0x11BB844, r'/api/v1/scores')
 ```
 
 Kami mendapat beberapa domain dan endpoint yang menarik. Kami mencoba mengakses
-http://staging.shooter.pwn.seccon.jp/admin/ dan di-redirect ke halaman
+http://staging.shooter.pwn.seccon.jp/admin/ dan di-redirect ke halaman login.
 
 ![login](shooter_login.png)
 
