@@ -1,4 +1,4 @@
-# HITCON CTF 2018
+# HITCON CTF 2018 Online Quals
 
 https://ctftime.org/event/669
 
