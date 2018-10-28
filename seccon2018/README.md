@@ -12,7 +12,7 @@ https://ctftime.org/event/683
 
 # Pwn
 - [Classic Pwn (121)](classic-pwn)
-- [kindvm Pwn (255)](kindvm)
+- [kindvm (255)](kindvm)
 - [Profile (255)](profile)
 
 # QR
@@ -24,7 +24,7 @@ https://ctftime.org/event/683
 - [shooter (434)](shooter)
 - [Special Device File (231)](special-device-file)
 - [Special Instructions (262)](special-instructions)
-- [tctkToy (419)](tckttoy)
+- [tctkToy (419)](tctktoy)
 
 ## Web
 - [GhostKingdom (248)](ghostkingdom)
