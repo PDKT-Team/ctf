@@ -335,13 +335,7 @@ GETRAND: (Opcode:0x17)
 ```
 
 Kami mencoba beberapa implementasi `xorshift32` (di internet ada beberapa varian fungsi tersebut), kemudian kami mendapat flag dengan script ini.
-```python## English
-TODO
-
-
-## Bahasa Indonesia
-TODO
-
+```python
 import numpy as np
 
 state = np.uint32(0x92d68ca2)
