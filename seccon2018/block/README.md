@@ -13,7 +13,7 @@ Hint: Real answer flag is not easy to get it, if your post flag is incorrect, it
 [Bahasa Indonesia](#bahasa-indonesia)
 
 ## English
-With some recon, we knew the APK is build with Unity. We used [Unity Unpacker](http://devxdevelopment.com/UnityUnpacker) to analyze this APK and found this interesting asset.
+With some recon, we knew the APK is built with Unity. We used [Unity Unpacker](http://devxdevelopment.com/UnityUnpacker) to analyze this APK and found this interesting asset.
 
 ![flag asset](block.png)
 
