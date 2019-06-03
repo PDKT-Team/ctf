@@ -62,7 +62,7 @@ Quick googling about running PostgreSQL query asynchronously or in the backgroun
 
 Query that contains `dblink_connect` doesn't cause warning so `dblink` might be enabled.
 
-![](dblink-connect.jpg)
+![](dblink-connect.png)
 
 Normally, `dblink_connect` can be used to open a persistent connection to a remote PostgreSQL database. Example: `SELECT dblink_connect('host=HOST user=USER password=PASSWORD dbname=DBNAME')`. Because we can control the parameter of this function, we can perform SQL Server Side Request/Connection Forgery to our own host. That means we can perform Out-of-Band SQL Injection to exfiltrate data. At least, there are two ways to get the data from server:
 
