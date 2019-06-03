@@ -15,14 +15,14 @@ http://challenges.fbctf.com:8081
 ## English
 *Solved after the CTF ended.*
 
-### TL;DR
+### Summary
 - We can trigger PostgreSQL Injection by using hidden `user_search` parameter.
 - Query execution occurs in the background or asynchronously (probably with `dblink`) so the website only displays a warning message when there is a syntax or semantic error in the query.
 - We can't perform In-Band SQL Injection or Inferential (Blind) SQL Injection because everything is run in the background (we can only know if the syntax and semantic are correct or not).
 - Out-of-Band SQL Injection can be performed by using SQL SSRF via `dblink_connect` to establish a connection to our remote server so we can get the query result through DNS request or raw network dump (`(SELECT dblink_connect('host=HOST user=' || (QUERY) || ' password=PASSWORD dbname=DBNAME'))`).
-- The PostgreSQL user used is allowed to use `lo_import` to load a file into `pg_largeobject` catalog but doesn't have permission to perform `SELECT` on `pg_largeobject` nor using `lo_get` for new object's `oid`.
+- The current PostgreSQL user is allowed to use `lo_import` to load a file into `pg_largeobject` catalog but doesn't have permission to perform `SELECT` on `pg_largeobject` nor using `lo_get` for new object's `oid`.
 - We can get the list of all `oid` through `pg_largeobject_metadata` and then try to use `lo_get` for old `oid` to see if secret/flag file has been loaded before and the user used is allowed to load it.
-- We can get the flag by using `lo_get(16444)`!
+- The flag file has been loaded in the past with `oid` 16444 so we can get it by using `lo_get(16444)`!
 
 ### Detailed Steps
 
